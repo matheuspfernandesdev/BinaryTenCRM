@@ -1,0 +1,7 @@
+﻿services:
+  webapp:
+    image: binarytencrm
+    build: .
+    ports:
+      - "8081:80"
+      - "4022:4022"
