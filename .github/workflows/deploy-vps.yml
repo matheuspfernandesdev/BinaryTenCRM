@@ -27,7 +27,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no binaryten@${{ secrets.VPS_HOST }} << "EOF"
             cd /home/binaryten/apps/binarytencrm
-            git pull
+            git pull origin main
             docker compose down
             docker compose up -d --build
           EOF
