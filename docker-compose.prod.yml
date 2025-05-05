@@ -3,7 +3,7 @@ services:
   webapp:
     image: binarytencrm
     build:
-      context: .
+      context: ./BinaryTenCRM
       dockerfile: Dockerfile
     ports:
       - "80:8080"
