@@ -25,7 +25,7 @@ jobs:
 
       - name: Deploy via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no binaryten@${{ secrets.VPS_HOST }} << "EOF"
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.VPS_HOST }} << "EOF"
             cd /home/binaryten/apps/binarytencrm
             git pull origin main
             docker compose down
