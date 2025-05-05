@@ -1,7 +1,19 @@
-﻿services:
+﻿version: '3.8'
+
+services:
   webapp:
-    image: binarytencrm
-    build: .
+    container_name: binarytencrm-web  # Nome do container (opcional, mas útil)
+    image: binarytencrm               # Nome da imagem
+    build:
+      context: .
+      dockerfile: Dockerfile          # Define o Dockerfile padrão
     ports:
-      - "8081:80"
-      - "4022:4022"
+      - "8081:8080"                     # Porta externa:interna (ex: localhost:8081)
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      # Exemplo de onde você colocará suas variáveis no passo 2:
+      # - ConnectionStrings__DefaultConnection=valor
+      # - Smtp__Host=smtp.seudominio.com
+    restart: unless-stopped          # Boa prática para produção
+
+

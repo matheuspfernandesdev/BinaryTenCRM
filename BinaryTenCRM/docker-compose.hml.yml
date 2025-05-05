@@ -1,0 +1,16 @@
+﻿version: "3.9"
+services:
+  webapp:
+    image: binarytencrm
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Homologation
+      - ConnectionStrings__DefaultConnection=${PROD_DB_CONNECTION_STRING}
+      - Smtp__Host=${PROD_SMTP_HOST}
+      - Smtp__Port=${PROD_SMTP_PORT}
+      - Smtp__Username=${PROD_SMTP_USERNAME}
+      - Smtp__Password=${PROD_SMTP_PASSWORD}

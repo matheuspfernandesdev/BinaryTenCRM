@@ -4,55 +4,54 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace BinaryTenCRM.Controllers
+namespace BinaryTenCRM.Controllers;
+
+public class AccessController : Controller
 {
-    public class AccessController : Controller
+    public IActionResult Login()
     {
-        public IActionResult Login()
+        ClaimsPrincipal principal = HttpContext.User;
+
+        if (principal.Identity.IsAuthenticated)
         {
-            ClaimsPrincipal principal = HttpContext.User;
-
-            if (principal.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Login(VMLogin login)
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(VMLogin login)
+    {
+        if (login.Email == "matheuswith51@hotmail.com" && login.Password == "123")
         {
-            if (login.Email == "matheuswith51@hotmail.com" &&  login.Password == "123")
-            {
-                await ConfigureLogin(login);
+            await ConfigureLogin(login);
 
-                return RedirectToAction("Index", "Home");
-            }
-
-            ViewData["LoginValidation"] = "Usuário não encontrado";
-
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
-        private async Task ConfigureLogin(VMLogin login)
-        {
-            List<Claim> claims = new List<Claim>()
-                {
-                    new Claim(ClaimTypes.Email, login.Email),
-                    new Claim("binaryTen", "10")
-                };
+        ViewData["LoginValidation"] = "Usuário não encontrado";
 
-            ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        return View();
+    }
 
-            AuthenticationProperties props = new AuthenticationProperties()
+    private async Task ConfigureLogin(VMLogin login)
+    {
+        List<Claim> claims = new List<Claim>()
             {
-                AllowRefresh = true,
-                IsPersistent = login.RememberMe
+                new Claim(ClaimTypes.Email, login.Email),
+                new Claim("binaryTen", "10")
             };
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                                         new ClaimsPrincipal(identity), props);
-        }
+        ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        AuthenticationProperties props = new AuthenticationProperties()
+        {
+            AllowRefresh = true,
+            IsPersistent = login.RememberMe
+        };
+
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                                     new ClaimsPrincipal(identity), props);
     }
 }
