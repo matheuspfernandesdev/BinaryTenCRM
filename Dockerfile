@@ -16,18 +16,19 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 # Copia o csproj e faz restore (evita rebuilds desnecessários se só código mudou)
-COPY ["BinaryTenCRM.csproj", "./"]
-RUN dotnet restore "./BinaryTenCRM.csproj"
+COPY ["BinaryTenCRM/BinaryTenCRM.csproj", "BinaryTenCRM/"]
+RUN dotnet restore "BinaryTenCRM/BinaryTenCRM.csproj"
 
 # Copia todo o código restante
 COPY . .
 
 # Compila a aplicação
-RUN dotnet build "./BinaryTenCRM.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR /src/BinaryTenCRM
+RUN dotnet build "BinaryTenCRM.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Fase de publicação
 FROM build AS publish
-RUN dotnet publish "./BinaryTenCRM.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "BinaryTenCRM.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # Fase final: onde o app vai rodar
 FROM base AS final
