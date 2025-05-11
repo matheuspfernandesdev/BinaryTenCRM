@@ -6,7 +6,7 @@ services:
     image: binarytencrm               # Nome da imagem
     build:
       context: ./BinaryTenCRM
-      dockerfile: Dockerfile          # Define o Dockerfile padrão
+      dockerfile: ../Dockerfile          # Define o Dockerfile padrão
     ports:
       - "8081:8080"                     # Porta externa:interna (ex: localhost:8081)
     environment:
